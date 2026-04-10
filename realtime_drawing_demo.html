@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draw.io 实时绘制演示</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .demo-section {
+            padding: 40px;
+        }
+        
+        .step {
+            margin-bottom: 30px;
+            padding: 25px;
+            border-radius: 10px;
+            background: #f8f9fa;
+            border-left: 4px solid #4285f4;
+            transition: all 0.3s ease;
+        }
+        
+        .step:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .step h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 1.3em;
+        }
+        
+        .step p {
+            margin: 0;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .highlight {
+            background: #e3f2fd;
+            border-left-color: #2196f3;
+        }
+        
+        .success {
+            background: #e8f5e8;
+            border-left-color: #4caf50;
+        }
+        
+        .warning {
+            background: #fff3e0;
+            border-left-color: #ff9800;
+        }
+        
+        .error {
+            background: #ffebee;
+            border-left-color: #f44336;
+        }
+        
+        .iframe-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .btn {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #3367d6;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(66, 133, 244, 0.3);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4285f4, #34a853);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .drawing-tips {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .drawing-tips h4 {
+            margin: 0 0 10px 0;
+            color: #856404;
+        }
+        
+        .drawing-tips ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #856404;
+        }
+        
+        .drawing-tips li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 Draw.io 实时绘制演示</h1>
+            <p>在Draw.io编辑器中实时绘制登录流程图</p>
+        </div>
+        
+        <div class="demo-section">
+            <div class="drawing-tips">
+                <h4>💡 实时绘制说明</h4>
+                <ul>
+                    <li>Draw.io支持实时协作和自动保存</li>
+                    <li>每次绘制操作都会立即显示在画布上</li>
+                    <li>支持拖拽、连接、样式调整等实时操作</li>
+                    <li>可以实时预览最终效果</li>
+                </ul>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress"></div>
+            </div>
+            
+            <div class="controls">
+                <button class="btn" onclick="startDrawing()">开始绘制演示</button>
+                <button class="btn" onclick="openDrawio()">打开Draw.io</button>
+                <button class="btn" onclick="importXML()">导入XML文件</button>
+            </div>
+            
+            <div class="iframe-container">
+                <iframe src="http://127.0.0.1:6956" id="drawio-frame"></iframe>
+            </div>
+            
+            <div id="steps">
+                <div class="step highlight">
+                    <h3>步骤 1: 创建参与者</h3>
+                    <p>在Draw.io中创建四个参与者：用户、前端、后端API、数据库。使用矩形框和文本工具。</p>
+                </div>
+                
+                <div class="step">
+                    <h3>步骤 2: 绘制消息流</h3>
+                    <p>使用连接线工具绘制从用户到前端的消息箭头，表示"输入用户名和密码"。</p>
+                </div>
+                
+                <div class="step">
+                    <h3>步骤 3: 前端验证</h3>
+                    <p>绘制前端自调用箭头，表示表单验证过程。</p>
+                </div>
+                
+                <div class="step">
+                    <h3>步骤 4: API调用</h3>
+                    <p>从前端到后端API绘制连接线，标注POST请求和参数。</p>
+                </div>
+                
+                <div class="step">
+                    <h3>步骤 5: 数据库查询</h3>
+                    <p>从后端API到数据库绘制查询箭头，标注SQL语句。</p>
+                </div>
+                
+                <div class="step">
+                    <h3>步骤 6: 数据返回</h3>
+                    <p>绘制从数据库返回到后端API的虚线箭头。</p>
+                </div>
+                
+                <div class="step success">
+                    <h3>步骤 7: 密码验证</h3>
+                    <p>在后端API内部绘制自调用，表示密码验证过程（绿色表示成功）。</p>
+                </div>
+                
+                <div class="step success">
+                    <h3>步骤 8: 生成Token</h3>
+                    <p>绘制JWT Token生成过程的自调用箭头。</p>
+                </div>
+                
+                <div class="step success">
+                    <h3>步骤 9: 返回响应</h3>
+                    <p>从后端API返回到前端的成功响应虚线。</p>
+                </div>
+                
+                <div class="step warning">
+                    <h3>步骤 10: 错误处理</h3>
+                    <p>绘制错误流程分支（橙色表示警告）。</p>
+                </div>
+                
+                <div class="step error">
+                    <h3>步骤 11: 异常情况</h3>
+                    <p>绘制用户不存在或密码错误的处理流程（红色表示错误）。</p>
+                </div>
+                
+                <div class="step highlight">
+                    <h3>步骤 12: 添加注释</h3>
+                    <p>使用注释工具添加安全措施和技术说明。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentStep = 0;
+        const totalSteps = 12;
+        
+        function updateProgress() {
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+        }
+        
+        function startDrawing() {
+            const steps = document.querySelectorAll('.step');
+            currentStep = 0;
+            
+            function highlightNextStep() {
+                if (currentStep < steps.length) {
+                    // 移除所有高亮
+                    steps.forEach(step => step.classList.remove('highlight'));
+                    
+                    // 高亮当前步骤
+                    steps[currentStep].classList.add('highlight');
+                    
+                    // 滚动到当前步骤
+                    steps[currentStep].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    currentStep++;
+                    updateProgress();
+                    
+                    // 3秒后进入下一步
+                    setTimeout(highlightNextStep, 3000);
+                }
+            }
+            
+            highlightNextStep();
+        }
+        
+        function openDrawio() {
+            window.open('http://127.0.0.1:6956', '_blank');
+        }
+        
+        function importXML() {
+            // 创建文件输入
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.xml';
+            
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        // 在Draw.io中导入XML的逻辑
+                        alert('XML文件已准备导入，请在Draw.io中使用文件→导入功能');
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            
+            input.click();
+        }
+        
+        // 自动开始演示
+        setTimeout(startDrawing, 1000);
+    </script>
+</body>
+</html>

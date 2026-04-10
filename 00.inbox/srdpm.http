@@ -1,0 +1,11 @@
+
+
+
+curl 'https://rd-mokadisplay.tcl.com/connect/oauth2/authorize' \
+  -H 'content-type: application/json' \
+  --data-raw '{"username":"lixuebo","password":"6S=absinC/2"}'
+
+
+###
+
+curl https://rd-mokadisplay.tcl.com/srdpm-api/workload/platform' -H 'accept: application/json, text/plain, */*' -H 'accesstoken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJsaXh1ZWJvIiwiVXNlck5hbWUiOiLmnY7pm6rms6IgWHVlYm8gTGkiLCJVc2VyTWFpbCI6ImxpeHVlYm9AdGNsLmNvbSIsIlB3ZCI6IjU2YzRlZTU0ZWJhZWVmODkzMGYzZDdmYjMxZDY2ZDQ1YTFhMjQyYzFhMjU5MDdhMGNlMGY3OGZhYWRlNDQyODUiLCJUaWNrZXROYW1lIjoiU0lBTVRHVCIsIlRpY2tldFZhbHVlIjoiVEdULTM5MDk0NzUtdFd3S3VPU0h1dzlVUmE5dHdLZU9tUXoweWpuM3hyTVQ5NWY1TFRDUlAxWGRKRkplbHItU0lBTSIsImlzcyI6Ik1PS0EtUkQiLCJleHAiOjE3NzI4MjcyNjYsIm5iZiI6MTc3Mjc5ODQ2NiwiaWF0IjoxNzcyNzk4NDY2fQ.583944bK57jgTlGJYtog9mjev5nWu8dS-zvCLjmO05w' -H 'content-type: application/json' --data-raw '{"customer_id":[1],"work_hours":8.5,"department_id":1,"transaction_id":62,"content":"测试","file_url":[],"submit_time":"2026-02-13","times":1}'

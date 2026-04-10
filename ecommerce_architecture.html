@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电商软件架构图</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.2em;
+        }
+        
+        .architecture {
+            padding: 40px;
+        }
+        
+        .layer {
+            margin-bottom: 30px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .layer-header {
+            padding: 20px;
+            font-size: 1.4em;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+        }
+        
+        .layer-content {
+            padding: 25px;
+            background: white;
+        }
+        
+        .services {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .service {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            border-left: 4px solid;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .service:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .service h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 1.1em;
+        }
+        
+        .service ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #666;
+        }
+        
+        .service li {
+            margin-bottom: 8px;
+        }
+        
+        /* 前端层 - 蓝色 */
+        .frontend { border-left-color: #4285f4; }
+        .frontend .layer-header { background: #4285f4; }
+        
+        /* 网关层 - 绿色 */
+        .gateway { border-left-color: #34a853; }
+        .gateway .layer-header { background: #34a853; }
+        
+        /* 微服务层 - 红色 */
+        .microservice { border-left-color: #ea4335; }
+        .microservice .layer-header { background: #ea4335; }
+        
+        /* 数据层 - 紫色 */
+        .data { border-left-color: #9c27b0; }
+        .data .layer-header { background: #9c27b0; }
+        
+        .flow-arrow {
+            text-align: center;
+            font-size: 2em;
+            color: #666;
+            margin: 20px 0;
+        }
+        
+        .tech-stack {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 30px;
+            margin-top: 40px;
+        }
+        
+        .tech-stack h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        .tech-item {
+            background: white;
+            border-radius: 5px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .tech-item strong {
+            display: block;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .tech-item span {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 768px) {
+            .services {
+                grid-template-columns: 1fr;
+            }
+            
+            .tech-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛒 电商软件架构图</h1>
+            <p>微服务架构设计 - 完整的电商系统解决方案</p>
+        </div>
+        
+        <div class="architecture">
+            <!-- 前端层 -->
+            <div class="layer frontend">
+                <div class="layer-header">📱 前端层 (Frontend Layer)</div>
+                <div class="layer-content">
+                    <div class="services">
+                        <div class="service">
+                            <h3>🌐 Web应用</h3>
+                            <ul>
+                                <li>React/Vue.js</li>
+                                <li>响应式设计</li>
+                                <li>PWA支持</li>
+                            </ul>
+                        </div>
+                        <div class="service">
+                            <h3>📱 移动应用</h3>
+                            <ul>
+                                <li>iOS原生应用</li>
+                                <li>Android原生应用</li>
+                                <li>React Native</li>
+                            </ul>
+                        </div>
+                        <div class="service">
+                            <h3>📲 小程序</h3>
+                            <ul>
+                                <li>微信小程序</li>
+                                <li>支付宝小程序</li>
+                                <li>多端适配</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flow-arrow">⬇️</div>
+            
+            <!-- API网关层 -->
+            <div class="layer gateway">
+                <div class="layer-header">🚪 API网关层 (API Gateway)</div>
+                <div class="layer-content">
+                    <div class="services">
+                        <div class="service">
+                            <h3>⚖️ 负载均衡</h3>
+                            <ul>
+                                <li>Nginx/HAProxy</li>
+                                <li>健康检查</li>
+                                <li>故障转移</li>
+                            </ul>
+                        </div>
+                        <div class="service">
+                            <h3>🛣️ 路由转发</h3>
+                            <ul>
+                                <li>服务发现</li>
+                                <li>动态路由</li>
+                                <li>版本管理</li>
+                            </ul>
+                        </div>
+                        <div class="service">
+                            <h3>🔐 认证授权</h3>
+                            <ul>
+                                <li>JWT Token</li>
+                                <li>OAuth2</li>
+                                <li>权限控制</li>
+                            </ul>
+                        </div>
+                        <div class="service">
+                            <h3>🛡️ 限流熔断</h3>
+                            <ul>
+                                <li>请求限流</li>
+                                <li>熔断保护</li>
+                                <li>降级策略</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flow-arrow">⬇️</div>
+            
+            <!-- 微服务层 -->
+            <div class="layer microservice">
+                <div class="layer-header">⚙️ 微服务层 (Microservices Layer)</div>
+                <div class="layer-content">
+                    <div class="services">
+                        <div class="service">
+                            <h3>👤 用户服务</h3>
+                            <ul>
+                                <li>用户注册/登录</li>
+                                <li>个人信息管理</li>
+                                <li>地址管理</li>
+                                <li>会员体系</li>
+                            </ul>
+                        </div>
+                        <div class="service">
+                            <h3>📦 商品服务</h3>
+                            <ul>
+                                <li>商品信息管理</li>
+                                <li>分类管理</li>
+                                <li>库存管理</li>
+                                <li>搜索服务</li>
+                            </ul>
+                        </div>
+                        <div class="service">
+                            <h3>🛒 订单服务</h3>
+                            <ul>
+                                <li>订单创建</li>
+                                <li>订单支付</li>
+                                <li>订单状态管理</li>
+                                <li>订单历史</li>
+                            </ul>
+                        </div>
+                        <div class="service">
+                            <h3>🛗 购物车服务</h3>
+                            <ul>
+                                <li>购物车管理</li>
+                                <li>商品添加/删除</li>
+                                <li>数量管理</li>
+                                <li>会话保持</li>
+                            </ul>
+                        </div>
+                        <div class="service">
+                            <h3>💳 支付服务</h3>
+                            <ul>
+                                <li>支付宝集成</li>
+                                <li>微信支付</li>
+                                <li>银行卡支付</li>
+                                <li>退款处理</li>
+                            </ul>
+                        </div>
+                        <div class="service">
+                            <h3>🚚 物流服务</h3>
+                            <ul>
+                                <li>配送管理</li>
+                                <li>物流跟踪</li>
+                                <li>仓库管理</li>
+                                <li>配送优化</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flow-arrow">⬇️</div>
+            
+            <!-- 数据存储层 -->
+            <div class="layer data">
+                <div class="layer-header">🗄️ 数据存储层 (Data Storage Layer)</div>
+                <div class="layer-content">
+                    <div class="services">
+                        <div class="service">
+                            <h3>🗃️ 关系型数据库</h3>
+                            <ul>
+                                <li>MySQL (用户、订单)</li>
+                                <li>PostgreSQL (商品、分类)</li>
+                                <li>主从复制</li>
+                                <li>读写分离</li>
+                            </ul>
+                        </div>
+                        <div class="service">
+                            <h3>📊 NoSQL数据库</h3>
+                            <ul>
+                                <li>Redis (缓存、会话)</li>
+                                <li>MongoDB (商品详情、日志)</li>
+                                <li>Elasticsearch (搜索)</li>
+                                <li>数据分片</li>
+                            </ul>
+                        </div>
+                        <div class="service">
+                            <h3>📨 消息队列</h3>
+                            <ul>
+                                <li>RabbitMQ (异步处理)</li>
+                                <li>Kafka (日志收集)</li>
+                                <li>事件驱动</li>
+                                <li>解耦服务</li>
+                            </ul>
+                        </div>
+                        <div class="service">
+                            <h3>🌐 第三方服务</h3>
+                            <ul>
+                                <li>短信服务 (验证码、通知)</li>
+                                <li>邮件服务 (营销邮件)</li>
+                                <li>地图服务 (物流配送)</li>
+                                <li>CDN服务 (静态资源)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 技术栈 -->
+        <div class="tech-stack">
+            <h2>🛠️ 技术栈</h2>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <strong>前端</strong>
+                    <span>React/Vue/TypeScript</span>
+                </div>
+                <div class="tech-item">
+                    <strong>后端</strong>
+                    <span>Spring Boot/Node.js</span>
+                </div>
+                <div class="tech-item">
+                    <strong>数据库</strong>
+                    <span>MySQL/Redis/MongoDB</span>
+                </div>
+                <div class="tech-item">
+                    <strong>消息队列</strong>
+                    <span>RabbitMQ/Kafka</span>
+                </div>
+                <div class="tech-item">
+                    <strong>容器化</strong>
+                    <span>Docker/K8s</span>
+                </div>
+                <div class="tech-item">
+                    <strong>监控</strong>
+                    <span>Prometheus/Grafana</span>
+                </div>
+                <div class="tech-item">
+                    <strong>搜索</strong>
+                    <span>Elasticsearch</span>
+                </div>
+                <div class="tech-item">
+                    <strong>网关</strong>
+                    <span>Nginx/Kong</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 添加交互效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const services = document.querySelectorAll('.service');
+            
+            services.forEach(service => {
+                service.addEventListener('click', function() {
+                    this.style.transform = 'scale(1.05)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 200);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

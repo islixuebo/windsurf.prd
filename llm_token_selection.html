@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大模型Token选择过程可视化</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            margin: 0;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            padding: 40px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            color: #333;
+            margin: 0;
+            font-size: 2.5em;
+        }
+        
+        .header p {
+            color: #666;
+            margin: 10px 0 0 0;
+            font-size: 1.2em;
+        }
+        
+        .process-flow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 40px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .step {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+        }
+        
+        .step-box {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .step-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .step-box.input {
+            background: #e3f2fd;
+            border-color: #2196f3;
+        }
+        
+        .step-box.model {
+            background: #f3e5f5;
+            border-color: #9c27b0;
+        }
+        
+        .step-box.logits {
+            background: #fff3e0;
+            border-color: #ff9800;
+        }
+        
+        .step-box.selection {
+            background: #e8f5e8;
+            border-color: #4caf50;
+        }
+        
+        .step-box.output {
+            background: #e1f5fe;
+            border-color: #03a9f4;
+        }
+        
+        .step-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .step-content {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .arrow {
+            font-size: 2em;
+            color: #666;
+            margin: 0 10px;
+        }
+        
+        .tokens-container {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        
+        .tokens-title {
+            text-align: center;
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        .tokens-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .token-box {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .token-box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .token-box.selected {
+            background: #4caf50;
+            color: white;
+            border-color: #2e7d32;
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+        }
+        
+        .token-word {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .token-logit {
+            font-size: 0.9em;
+            color: #666;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .token-box.selected .token-logit {
+            color: #e8f5e8;
+        }
+        
+        .logit-bar {
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        
+        .logit-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff9800, #f44336);
+            transition: width 1s ease;
+        }
+        
+        .token-box.selected .logit-fill {
+            background: linear-gradient(90deg, #4caf50, #2e7d32);
+        }
+        
+        .result-container {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin: 40px 0;
+        }
+        
+        .result-title {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+        }
+        
+        .result-sentence {
+            font-size: 1.8em;
+            font-weight: bold;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            display: inline-block;
+        }
+        
+        .highlight {
+            background: rgba(255,255,255,0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin: 0 2px;
+        }
+        
+        .animation-controls {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .btn {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #3367d6;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(66, 133, 244, 0.3);
+        }
+        
+        .btn.success {
+            background: #4caf50;
+        }
+        
+        .btn.success:hover {
+            background: #45a049;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @media (max-width: 768px) {
+            .process-flow {
+                flex-direction: column;
+            }
+            
+            .arrow {
+                transform: rotate(90deg);
+                margin: 10px 0;
+            }
+            
+            .tokens-grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 大模型Token选择过程可视化</h1>
+            <p>展示从输入文本到选择最优token的完整流程</p>
+        </div>
+        
+        <div class="process-flow">
+            <div class="step">
+                <div class="step-box input">
+                    <div class="step-title">📝 输入文本</div>
+                    <div class="step-content">"今天还没吃饭，现在好"</div>
+                </div>
+            </div>
+            
+            <div class="arrow">→</div>
+            
+            <div class="step">
+                <div class="step-box model">
+                    <div class="step-title">🧠 大模型处理</div>
+                    <div class="step-content">计算隐藏状态<br>生成logits向量</div>
+                </div>
+            </div>
+            
+            <div class="arrow">→</div>
+            
+            <div class="step">
+                <div class="step-box logits">
+                    <div class="step-title">📊 Logits输出</div>
+                    <div class="step-content">每个候选token<br>的概率分数</div>
+                </div>
+            </div>
+            
+            <div class="arrow">→</div>
+            
+            <div class="step">
+                <div class="step-box selection">
+                    <div class="step-title">🎯 选择最大值</div>
+                    <div class="step-content">argmax(logits)<br>选择最优token</div>
+                </div>
+            </div>
+            
+            <div class="arrow">→</div>
+            
+            <div class="step">
+                <div class="step-box output">
+                    <div class="step-title">✅ 输出结果</div>
+                    <div class="step-content">拼接选中的token<br>生成完整句子</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tokens-container">
+            <div class="tokens-title">🎯 Token候选列表与Logits分数</div>
+            
+            <div class="tokens-grid" id="tokensGrid">
+                <!-- Tokens will be generated by JavaScript -->
+            </div>
+            
+            <div class="animation-controls">
+                <button class="btn" onclick="animateSelection()">🎬 演示选择过程</button>
+                <button class="btn success" onclick="showResult()">🎯 显示最终结果</button>
+            </div>
+        </div>
+        
+        <div class="result-container" id="resultContainer" style="display: none;">
+            <div class="result-title">🎉 最终生成的句子</div>
+            <div class="result-sentence">
+                今天还没吃饭，现在好<span class="highlight">饿</span>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Token候选数据
+        const tokens = [
+            { word: "饿", logit: 2.45, probability: 0.68 },
+            { word: "累", logit: 1.23, probability: 0.15 },
+            { word: "困", logit: 0.89, probability: 0.08 },
+            { word: "烦", logit: 0.67, probability: 0.05 },
+            { word: "冷", logit: 0.45, probability: 0.02 },
+            { word: "热", logit: 0.34, probability: 0.01 },
+            { word: "忙", logit: 0.23, probability: 0.005 },
+            { word: "闲", logit: 0.12, probability: 0.002 },
+            { word: "急", logit: 0.08, probability: 0.001 },
+            { word: "怕", logit: 0.05, probability: 0.0005 }
+        ];
+        
+        // 初始化token显示
+        function initializeTokens() {
+            const grid = document.getElementById('tokensGrid');
+            grid.innerHTML = '';
+            
+            tokens.forEach((token, index) => {
+                const tokenBox = document.createElement('div');
+                tokenBox.className = 'token-box';
+                tokenBox.id = `token-${index}`;
+                
+                const maxLogit = Math.max(...tokens.map(t => t.logit));
+                const barWidth = (token.logit / maxLogit) * 100;
+                
+                tokenBox.innerHTML = `
+                    <div class="token-word">${token.word}</div>
+                    <div class="token-logit">logit: ${token.logit.toFixed(2)}</div>
+                    <div class="token-logit">prob: ${(token.probability * 100).toFixed(1)}%</div>
+                    <div class="logit-bar">
+                        <div class="logit-fill" style="width: 0%"></div>
+                    </div>
+                `;
+                
+                grid.appendChild(tokenBox);
+                
+                // 动画显示logit条
+                setTimeout(() => {
+                    const fill = tokenBox.querySelector('.logit-fill');
+                    fill.style.width = barWidth + '%';
+                }, 100 * index);
+            });
+        }
+        
+        // 动画演示选择过程
+        function animateSelection() {
+            const grid = document.getElementById('tokensGrid');
+            const tokenBoxes = grid.querySelectorAll('.token-box');
+            
+            // 重置所有token
+            tokenBoxes.forEach(box => box.classList.remove('selected', 'pulse'));
+            
+            // 按logit值排序
+            const sortedTokens = tokens.map((token, index) => ({...token, index}))
+                .sort((a, b) => b.logit - a.logit);
+            
+            // 逐个高亮显示
+            sortedTokens.forEach((token, rank) => {
+                setTimeout(() => {
+                    const box = document.getElementById(`token-${token.index}`);
+                    box.classList.add('pulse');
+                    
+                    setTimeout(() => {
+                        box.classList.remove('pulse');
+                        if (rank === 0) {
+                            box.classList.add('selected');
+                        }
+                    }, 800);
+                }, rank * 500);
+            });
+            
+            // 最后显示结果
+            setTimeout(() => {
+                showResult();
+            }, sortedTokens.length * 500 + 1000);
+        }
+        
+        // 显示最终结果
+        function showResult() {
+            // 找到logit最大的token
+            const maxToken = tokens.reduce((max, token) => 
+                token.logit > max.logit ? token : max
+            );
+            
+            // 标记选中的token
+            const selectedIndex = tokens.indexOf(maxToken);
+            const selectedBox = document.getElementById(`token-${selectedIndex}`);
+            selectedBox.classList.add('selected');
+            
+            // 显示结果容器
+            const resultContainer = document.getElementById('resultContainer');
+            resultContainer.style.display = 'block';
+            resultContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        // 页面加载完成后初始化
+        window.addEventListener('load', () => {
+            initializeTokens();
+            
+            // 3秒后自动演示
+            setTimeout(() => {
+                animateSelection();
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

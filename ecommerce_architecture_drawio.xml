@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-03-10T11:39:00.000Z" agent="5.0" etag="xxx" version="21.6.5" type="device">
+  <diagram name="电商架构图" id="ecommerce-arch">
+    <mxGraphModel dx="1426" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="800" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- 前端层 -->
+        <mxCell id="2" value="前端层" style="swimlane;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="1120" height="120" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="3" value="Web应用&lt;br&gt;(React/Vue)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="2">
+          <mxGeometry x="60" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="4" value="移动应用&lt;br&gt;(iOS/Android)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="2">
+          <mxGeometry x="220" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="5" value="小程序&lt;br&gt;(微信/支付宝)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="2">
+          <mxGeometry x="380" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- API网关层 -->
+        <mxCell id="6" value="API网关层" style="swimlane;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="40" y="180" width="1120" height="100" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="7" value="负载均衡" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="6">
+          <mxGeometry x="60" y="30" width="100" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="8" value="路由转发" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="6">
+          <mxGeometry x="200" y="30" width="100" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="9" value="认证授权" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="6">
+          <mxGeometry x="340" y="30" width="100" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="10" value="限流熔断" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="6">
+          <mxGeometry x="480" y="30" width="100" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- 微服务层 -->
+        <mxCell id="11" value="微服务层" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="40" y="300" width="1120" height="200" as="geometry" />
+        </mxCell>
+        
+        <!-- 用户服务 -->
+        <mxCell id="12" value="用户服务" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="11">
+          <mxGeometry x="60" y="30" width="100" height="60" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="13" value="• 用户注册/登录&lt;br&gt;• 个人信息管理&lt;br&gt;• 地址管理" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="11">
+          <mxGeometry x="60" y="100" width="100" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- 商品服务 -->
+        <mxCell id="14" value="商品服务" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="11">
+          <mxGeometry x="200" y="30" width="100" height="60" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="15" value="• 商品信息管理&lt;br&gt;• 分类管理&lt;br&gt;• 库存管理&lt;br&gt;• 搜索服务" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="11">
+          <mxGeometry x="200" y="100" width="100" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- 订单服务 -->
+        <mxCell id="16" value="订单服务" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="11">
+          <mxGeometry x="340" y="30" width="100" height="60" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="17" value="• 订单创建&lt;br&gt;• 订单支付&lt;br&gt;• 订单状态管理&lt;br&gt;• 订单历史" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="11">
+          <mxGeometry x="340" y="100" width="100" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- 购物车服务 -->
+        <mxCell id="18" value="购物车服务" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="11">
+          <mxGeometry x="480" y="30" width="100" height="60" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="19" value="• 购物车管理&lt;br&gt;• 商品添加/删除&lt;br&gt;• 数量管理" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="11">
+          <mxGeometry x="480" y="100" width="100" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- 支付服务 -->
+        <mxCell id="20" value="支付服务" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="11">
+          <mxGeometry x="620" y="30" width="100" height="60" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="21" value="• 支付宝集成&lt;br&gt;• 微信支付&lt;br&gt;• 银行卡支付&lt;br&gt;• 退款处理" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="11">
+          <mxGeometry x="620" y="100" width="100" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- 物流服务 -->
+        <mxCell id="22" value="物流服务" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="11">
+          <mxGeometry x="760" y="30" width="100" height="60" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="23" value="• 配送管理&lt;br&gt;• 物流跟踪&lt;br&gt;• 仓库管理" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="11">
+          <mxGeometry x="760" y="100" width="100" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- 数据存储层 -->
+        <mxCell id="24" value="数据存储层" style="swimlane;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="40" y="520" width="1120" height="180" as="geometry" />
+        </mxCell>
+        
+        <!-- 关系型数据库 -->
+        <mxCell id="25" value="关系型数据库" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="24">
+          <mxGeometry x="60" y="30" width="120" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="26" value="• MySQL (用户、订单)&lt;br&gt;• PostgreSQL (商品、分类)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="24">
+          <mxGeometry x="60" y="90" width="120" height="70" as="geometry" />
+        </mxCell>
+        
+        <!-- NoSQL数据库 -->
+        <mxCell id="27" value="NoSQL数据库" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="24">
+          <mxGeometry x="220" y="30" width="120" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="28" value="• Redis (缓存、会话)&lt;br&gt;• MongoDB (商品详情、日志)&lt;br&gt;• Elasticsearch (搜索)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="24">
+          <mxGeometry x="220" y="90" width="120" height="70" as="geometry" />
+        </mxCell>
+        
+        <!-- 消息队列 -->
+        <mxCell id="29" value="消息队列" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="24">
+          <mxGeometry x="380" y="30" width="120" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="30" value="• RabbitMQ (异步处理)&lt;br&gt;• Kafka (日志收集)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="24">
+          <mxGeometry x="380" y="90" width="120" height="70" as="geometry" />
+        </mxCell>
+        
+        <!-- 第三方服务 -->
+        <mxCell id="31" value="第三方服务" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="24">
+          <mxGeometry x="540" y="30" width="120" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="32" value="• 短信服务&lt;br&gt;• 邮件服务&lt;br&gt;• 地图服务&lt;br&gt;• CDN服务" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="24">
+          <mxGeometry x="540" y="90" width="120" height="70" as="geometry" />
+        </mxCell>
+        
+        <!-- 连接线 -->
+        <mxCell id="33" edge="1" parent="1" source="3" target="7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="34" edge="1" parent="1" source="4" target="7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="35" edge="1" parent="1" source="5" target="7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="36" edge="1" parent="1" source="7" target="12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="37" edge="1" parent="1" source="7" target="14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="38" edge="1" parent="1" source="7" target="16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="39" edge="1" parent="1" source="7" target="18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="40" edge="1" parent="1" source="7" target="20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="41" edge="1" parent="1" source="7" target="22">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="42" edge="1" parent="1" source="12" target="25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="43" edge="1" parent="1" source="14" target="27">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="44" edge="1" parent="1" source="16" target="25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="45" edge="1" parent="1" source="18" target="27">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="46" edge="1" parent="1" source="20" target="29">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="47" edge="1" parent="1" source="22" target="31">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
